@@ -10,4 +10,6 @@ public interface OrganizationService {
     List<OrganizationDTO> getAllOrganizations();
 
     OrganizationDTO getOrganizationById(long id);
+
+    OrganizationDTO updateOrganization(OrganizationDTO organizationDTO, long id);
 }

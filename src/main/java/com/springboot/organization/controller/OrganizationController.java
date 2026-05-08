@@ -31,9 +31,18 @@ public class OrganizationController {
         return organizationService.getAllOrganizations();
     }
 
-    // creates get organization by id
+    // creates get organization by id api
     @GetMapping("/{id}")
     public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable(name = "id") long id) {
         return ResponseEntity.ok(organizationService.getOrganizationById(id));
+    }
+
+    // update organization by id api
+    @PutMapping("/{id}")
+    public ResponseEntity<OrganizationDTO> updateOrganization(@RequestBody OrganizationDTO organizationDTO, @PathVariable(name = "id") long id) {
+
+        OrganizationDTO organizationResponse = organizationService.updateOrganization(organizationDTO, id);
+
+        return new ResponseEntity<>(organizationResponse, HttpStatus.OK);
     }
 }

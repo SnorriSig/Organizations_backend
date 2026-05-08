@@ -46,6 +46,19 @@ public class OrganizationServiceImpl implements OrganizationService {
         return mapToDTO(organization);
     }
 
+    @Override
+    public OrganizationDTO updateOrganization(OrganizationDTO organizationDTO, long id) {
+        // Get organization by id from database
+        Organization organization = organizationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Organization", "id", id));
+
+        organization.setName(organizationDTO.getName());
+        organization.setDescription(organizationDTO.getDescription());
+        organization.setLocation(organizationDTO.getLocation());
+
+        Organization updatedOrganization = organizationRepository.save(organization);
+        return mapToDTO(updatedOrganization);
+    }
+
     // convert DTO into Entity
     private Organization mapToEntity(OrganizationDTO organizationDTO) {
         Organization organization = new Organization();
