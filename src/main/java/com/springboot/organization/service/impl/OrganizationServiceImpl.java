@@ -1,6 +1,7 @@
 package com.springboot.organization.service.impl;
 
 import com.springboot.organization.entity.Organization;
+import com.springboot.organization.exception.ResourceNotFoundException;
 import com.springboot.organization.payload.OrganizationDTO;
 import com.springboot.organization.repository.OrganizationRepository;
 import com.springboot.organization.service.OrganizationService;
@@ -36,6 +37,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         List<Organization> organizations = organizationRepository.findAll();
         return organizations.stream().map(organization -> mapToDTO(organization)).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrganizationDTO getOrganizationById(long id) {
+        Organization organization = organizationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Organization", "id", id));
+        return mapToDTO(organization);
     }
 
     // convert DTO into Entity

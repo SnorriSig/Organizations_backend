@@ -8,4 +8,6 @@ public interface OrganizationService {
     OrganizationDTO createOrganization(OrganizationDTO organizationDTO);
 
     List<OrganizationDTO> getAllOrganizations();
+
+    OrganizationDTO getOrganizationById(long id);
 }

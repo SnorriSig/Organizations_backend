@@ -30,4 +30,10 @@ public class OrganizationController {
     public List<OrganizationDTO> getAllOrganizations() {
         return organizationService.getAllOrganizations();
     }
+
+    // creates get organization by id
+    @GetMapping("/{id}")
+    public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable(name = "id") long id) {
+        return ResponseEntity.ok(organizationService.getOrganizationById(id));
+    }
 }
