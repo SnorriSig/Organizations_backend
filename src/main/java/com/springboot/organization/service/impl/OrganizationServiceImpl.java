@@ -41,19 +41,23 @@ public class OrganizationServiceImpl implements OrganizationService {
     // convert DTO into Entity
     private Organization mapToEntity(OrganizationDTO organizationDTO) {
         Organization organization = new Organization();
+
         organization.setName(organizationDTO.getName());
         organization.setDescription(organizationDTO.getDescription());
         organization.setLocation(organizationDTO.getLocation());
+
         return organization;
     }
 
     // convert Entity into DTO
     private OrganizationDTO mapToDTO(Organization organization) {
         OrganizationDTO organizationDTO = new OrganizationDTO();
-        organization.setId(organization.getId());
-        organization.setName(organization.getName());
-        organization.setDescription(organizationDTO.getDescription());
-        organization.setLocation(organizationDTO.getLocation());
+
+        organizationDTO.setId(organization.getId());
+        organizationDTO.setName(organization.getName());
+        organizationDTO.setDescription(organization.getDescription());
+        organizationDTO.setLocation(organization.getLocation());
+
         return organizationDTO;
     }
 }
