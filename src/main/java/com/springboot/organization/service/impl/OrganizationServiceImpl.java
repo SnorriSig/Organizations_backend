@@ -7,6 +7,9 @@ import com.springboot.organization.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
@@ -20,20 +23,37 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationDTO createOrganization(OrganizationDTO organizationDTO) {
 
         // convert DTO to entity
-        Organization organization = new Organization();
-        organization.setName(organizationDTO.getName());
-        organization.setDescription(organizationDTO.getDescription());
-        organization.setLocation(organization.getLocation());
-
+        Organization organization = mapToEntity(organizationDTO);
         Organization newOrganization = organizationRepository.save(organization);
 
         // convert entity to DTO
-        OrganizationDTO organizationResponse = new OrganizationDTO();
-        organizationResponse.setId(newOrganization.getId());
-        organizationResponse.setName(newOrganization.getName());
-        organizationResponse.setDescription(newOrganization.getDescription());
-        organizationResponse.setLocation(newOrganization.getLocation());
-
+        OrganizationDTO organizationResponse = mapToDTO(newOrganization);
         return organizationResponse;
+    }
+
+    @Override
+    public List<OrganizationDTO> getAllOrganizations() {
+
+        List<Organization> organizations = organizationRepository.findAll();
+        return organizations.stream().map(organization -> mapToDTO(organization)).collect(Collectors.toList());
+    }
+
+    // convert DTO into Entity
+    private Organization mapToEntity(OrganizationDTO organizationDTO) {
+        Organization organization = new Organization();
+        organization.setName(organizationDTO.getName());
+        organization.setDescription(organizationDTO.getDescription());
+        organization.setLocation(organizationDTO.getLocation());
+        return organization;
+    }
+
+    // convert Entity into DTO
+    private OrganizationDTO mapToDTO(Organization organization) {
+        OrganizationDTO organizationDTO = new OrganizationDTO();
+        organization.setId(organization.getId());
+        organization.setName(organization.getName());
+        organization.setDescription(organizationDTO.getDescription());
+        organization.setLocation(organizationDTO.getLocation());
+        return organizationDTO;
     }
 }
