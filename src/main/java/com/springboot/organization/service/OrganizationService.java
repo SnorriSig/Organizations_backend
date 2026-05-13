@@ -12,4 +12,6 @@ public interface OrganizationService {
     OrganizationDTO getOrganizationById(long id);
 
     OrganizationDTO updateOrganization(OrganizationDTO organizationDTO, long id);
+
+    void deleteOrganizationById(long id);
 }

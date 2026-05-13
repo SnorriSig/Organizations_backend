@@ -15,6 +15,8 @@ public class OrganizationController {
 
     private OrganizationService organizationService;
 
+    // Dependency injection
+    // Constructor injection
     public OrganizationController(OrganizationService organizationService) {
         this.organizationService = organizationService;
     }
@@ -44,5 +46,14 @@ public class OrganizationController {
         OrganizationDTO organizationResponse = organizationService.updateOrganization(organizationDTO, id);
 
         return new ResponseEntity<>(organizationResponse, HttpStatus.OK);
+    }
+
+    // delete organization by id api
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteOrganization(@PathVariable(name = "id") long id) {
+
+        organizationService.deleteOrganizationById(id);
+
+        return new ResponseEntity<>("Organization delete successfully.", HttpStatus.OK);
     }
 }
