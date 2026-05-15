@@ -5,7 +5,6 @@ import com.springboot.organization.exception.ResourceNotFoundException;
 import com.springboot.organization.payload.OrganizationDTO;
 import com.springboot.organization.repository.OrganizationRepository;
 import com.springboot.organization.service.OrganizationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
