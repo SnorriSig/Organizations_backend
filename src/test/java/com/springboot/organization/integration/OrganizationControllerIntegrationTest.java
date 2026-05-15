@@ -11,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -89,5 +89,50 @@ public class OrganizationControllerIntegrationTest {
                 .andExpect(jsonPath("$.name").value("Test Org"));
     }
 
+    @Test
+    void canUpdateOrganization() throws Exception {
+        MvcResult createResult = mockMvc.perform(post("/api/organizations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(organizationDTO)))
+                .andExpect(status().isCreated())
+                .andReturn();
 
+        OrganizationDTO createdOrganization = objectMapper.readValue(
+                createResult.getResponse().getContentAsString(),
+                OrganizationDTO.class
+        );
+
+        createdOrganization.setDescription("Updated Description");
+
+        mockMvc.perform(put("/api/organizations/" + createdOrganization.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createdOrganization)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description").value("Updated Description"));
+    }
+
+    @Test
+    void canDeleteOrganization() throws Exception {
+        // Create organization
+        String responseBody = mockMvc.perform(post("/api/organizations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(organizationDTO)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        OrganizationDTO createdOrganization = objectMapper.readValue(responseBody, OrganizationDTO.class);
+
+        // Delete organization
+        mockMvc.perform(delete("/api/organizations/" + createdOrganization.getId()))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        // Verify organization no longer exists
+        mockMvc.perform(get("/api/organisations/" + createdOrganization.getId()))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }
