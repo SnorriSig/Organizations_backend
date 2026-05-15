@@ -131,7 +131,7 @@ public class OrganizationControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         // Verify organization no longer exists
-        mockMvc.perform(get("/api/organisations/" + createdOrganization.getId()))
+        mockMvc.perform(get("/api/organizations/" + createdOrganization.getId()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
