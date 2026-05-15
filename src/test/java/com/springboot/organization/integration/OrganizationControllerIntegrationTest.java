@@ -135,4 +135,18 @@ public class OrganizationControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void cannotCreateOrganizationWithDuplicateName() throws Exception {
+        mockMvc.perform(post("/api/organizations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(organizationDTO)))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/organizations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(organizationDTO)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
 }

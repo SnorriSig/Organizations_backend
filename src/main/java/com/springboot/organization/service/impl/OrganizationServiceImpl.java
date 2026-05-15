@@ -1,6 +1,7 @@
 package com.springboot.organization.service.impl;
 
 import com.springboot.organization.entity.Organization;
+import com.springboot.organization.exception.OrganizationAlreadyExistsException;
 import com.springboot.organization.exception.ResourceNotFoundException;
 import com.springboot.organization.payload.OrganizationDTO;
 import com.springboot.organization.repository.OrganizationRepository;
@@ -21,6 +22,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDTO createOrganization(OrganizationDTO organizationDTO) {
+
+        if (organizationRepository.existsByName(organizationDTO.getName())) {
+            throw new OrganizationAlreadyExistsException("Organization name already exists");
+        }
 
         // convert DTO to entity
         Organization organization = mapToEntity(organizationDTO);
