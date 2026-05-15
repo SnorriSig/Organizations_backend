@@ -68,5 +68,26 @@ public class OrganizationControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].name").value("Test Org"));
     }
 
+    @Test
+    void canGetOrganizationById() throws Exception {
+            // Create organization
+        String responseBody = mockMvc.perform(post("/api/organizations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(organizationDTO)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        OrganizationDTO createdOrganization =
+                objectMapper.readValue(responseBody, OrganizationDTO.class);
+
+            // Fetch organization by id
+        mockMvc.perform(get("/api/organizations/" + createdOrganization.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Test Org"));
+    }
+
 
 }
